@@ -55,10 +55,10 @@ The database seeder creates these accounts on first start:
 
 | Role | Email | Password |
 | --- | --- | --- |
-| Administrator | `admin@cafepos.local` | `Admin@12345` |
-| Manager | `manager@cafepos.local` | `Manager@12345` |
-| Cashier | `cashier@cafepos.local` | `Cashier@12345` |
-| Kitchen | `kitchen@cafepos.local` | `Kitchen@12345` |
+| Administrator | `IF you need DM me` | `IF you need DM me` |
+| Manager | `IF you need DM me` | `IF you need DM me` |
+| Cashier | `IF you need DM me` | `IF you need DM me` |
+| Kitchen | `IF you need DM me` | `IF you need DM me` |
 
 The administrator is forced to choose a new password at first login. Change all seeded
 passwords before using the system in production.

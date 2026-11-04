@@ -1,0 +1,172 @@
+<Window x:Class="CafePOS.Desktop.Views.ProductEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Product" Height="720" Width="560"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="White">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,14">
+            <TextBlock Text="{Binding Heading}" Style="{StaticResource PageTitle}" FontSize="21" />
+            <TextBlock Text="Menu item details, pricing and kitchen routing." Style="{StaticResource MutedText}"
+                       Margin="0,3,0,0" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="PRODUCT NAME" Style="{StaticResource Label}" />
+                <TextBox Text="{Binding ProductName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="SKU" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding Sku, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="BARCODE (OPTIONAL)" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding Barcode, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="CATEGORY" Style="{StaticResource Label}" />
+                <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"
+                          DisplayMemberPath="Name" Margin="0,0,0,10" />
+
+                <TextBlock Text="DESCRIPTION" Style="{StaticResource Label}" />
+                <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" MinHeight="60"
+                         TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,10" />
+
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="SELLING PRICE" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding PriceText, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="COST PRICE" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding CostPriceText, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="4">
+                        <TextBlock Text="TAX RATE %" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding TaxRateText, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="PREPARATION STATION" Style="{StaticResource Label}" />
+                <ComboBox ItemsSource="{Binding Stations}" SelectedItem="{Binding SelectedStation}"
+                          Margin="0,0,0,10">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDisplay}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Text="IMAGE URL (OPTIONAL)" Style="{StaticResource Label}" />
+                <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" />
+
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="Available for sale" IsChecked="{Binding IsAvailable}" Margin="0,0,22,0" />
+                    <CheckBox Content="Track inventory with a recipe" IsChecked="{Binding TrackInventory}" />
+                </StackPanel>
+
+                <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0"
+                        Margin="0,16,0,0" Padding="0,12,0,0">
+                    <StackPanel>
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Text="MODIFIERS / EXTRAS" Style="{StaticResource Label}" Margin="0" />
+                                <TextBlock Text="Optional add-ons customers can choose for this item."
+                                           Style="{StaticResource MutedText}" Margin="0,3,0,0" />
+                            </StackPanel>
+                            <Button Content="+ Add modifier" Style="{StaticResource SmallButton}"
+                                    Command="{Binding AddModifierCommand}" HorizontalAlignment="Right"
+                                    VerticalAlignment="Center" AutomationProperties.Name="Add modifier" />
+                        </Grid>
+
+                        <Grid Margin="0,12,0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="92" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="64" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="30" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="NAME" Style="{StaticResource Label}"
+                                       Margin="0" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="2" Text="EXTRA" Style="{StaticResource Label}"
+                                       Margin="0" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <ItemsControl ItemsSource="{Binding Modifiers}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,6">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="8" />
+                                            <ColumnDefinition Width="92" />
+                                            <ColumnDefinition Width="8" />
+                                            <ColumnDefinition Width="64" />
+                                            <ColumnDefinition Width="8" />
+                                            <ColumnDefinition Width="30" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0" Height="34"
+                                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                                 AutomationProperties.Name="Modifier name" />
+                                        <TextBox Grid.Column="2" Height="34"
+                                                 Text="{Binding PriceText, UpdateSourceTrigger=PropertyChanged}"
+                                                 ToolTip="Extra charge added to the item price"
+                                                 AutomationProperties.Name="Modifier price" />
+                                        <CheckBox Grid.Column="4" Content="Active" IsChecked="{Binding IsActive}"
+                                                  VerticalAlignment="Center" />
+                                        <Button Grid.Column="6" Content="&#xE711;" Style="{StaticResource IconButton}"
+                                                Foreground="{StaticResource DangerBrush}" Background="Transparent"
+                                                BorderThickness="0" Width="30" Height="30" Padding="0"
+                                                Command="{Binding DataContext.RemoveModifierCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}" AutomationProperties.Name="Remove modifier" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <TextBlock Text="No extras yet. Add cheese, toppings or drink options."
+                                   Style="{StaticResource MutedText}" Margin="0,6,0,0"
+                                   Visibility="{Binding Modifiers.Count, Converter={StaticResource CountToVis}, ConverterParameter=invert}" />
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="{Binding ErrorMessage}" Style="{StaticResource ErrorText}" Margin="0,12,0,0"
+                           Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid Grid.Row="2" Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Cancel" Height="42" Click="OnCancel" IsCancel="True" />
+            <Button Grid.Column="2" Content="Save product" Style="{StaticResource AccentButton}"
+                    Height="42" Click="OnSave" IsDefault="True" />
+        </Grid>
+    </Grid>
+</Window>

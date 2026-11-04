@@ -1,0 +1,224 @@
+<UserControl x:Class="CafePOS.Desktop.Views.MenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Foreground="{StaticResource TextBrush}" FontFamily="Segoe UI">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="290" />
+            <ColumnDefinition Width="14" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Style="{StaticResource Card}">
+            <DockPanel>
+                <Grid DockPanel.Dock="Top" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Categories" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Text="Organise the menu" Style="{StaticResource MutedText}" />
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="New" Style="{StaticResource SmallButton}"
+                            Command="{Binding NewCategoryCommand}" VerticalAlignment="Center" />
+                </Grid>
+
+                <Border DockPanel.Dock="Bottom" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0"
+                        Padding="0,12,0,0" Margin="0,10,0,0">
+                    <StackPanel>
+                        <TextBlock Text="NAME" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding CategoryName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,8" />
+                        <TextBlock Text="DESCRIPTION" Style="{StaticResource Label}" />
+                        <TextBox Text="{Binding CategoryDescription, UpdateSourceTrigger=PropertyChanged}"
+                                 MinHeight="48" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,8" />
+                        <TextBlock Text="IMAGE" Style="{StaticResource Label}" />
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border Width="58" Height="58" CornerRadius="8" Background="#F1F5F9"
+                                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                                <Grid>
+                                    <TextBlock Text="&#xE8B7;" FontFamily="Segoe MDL2 Assets" FontSize="22"
+                                               Foreground="{StaticResource SoftTextBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               Visibility="{Binding CategoryImageUrl, Converter={StaticResource InverseNullToVis}}" />
+                                    <Image Source="{Binding CategoryImageUrl, Converter={StaticResource ImageUrl}}"
+                                           Stretch="UniformToFill"
+                                           Visibility="{Binding CategoryImageUrl, Converter={StaticResource NullToVis}}" />
+                                </Grid>
+                            </Border>
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Choose" Style="{StaticResource SmallButton}"
+                                            Command="{Binding ChooseCategoryImageCommand}" Margin="0,0,5,0" />
+                                    <Button Content="Remove" Style="{StaticResource GhostButton}"
+                                            Command="{Binding RemoveCategoryImageCommand}" />
+                                </StackPanel>
+                                <TextBlock Text="Up to 5 MB" Style="{StaticResource MutedText}" Margin="0,5,0,0" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="ORDER" Style="{StaticResource Label}" />
+                                <TextBox Text="{Binding CategoryOrder, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <CheckBox Grid.Column="2" Content="Active" IsChecked="{Binding CategoryActive}"
+                                      VerticalAlignment="Bottom" Height="36" />
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="8" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="Save" Style="{StaticResource AccentButton}"
+                                    Command="{Binding SaveCategoryCommand}" Height="34" />
+                            <Button Grid.Column="2" Content="Delete" Style="{StaticResource DangerButton}"
+                                    Command="{Binding DeleteCategoryCommand}" Height="34" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <ListBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}"
+                         BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="32" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid Width="28" Height="28" Margin="0,0,6,0">
+                                    <Border CornerRadius="7" Background="#F1F5F9"
+                                            Visibility="{Binding ImageUrl, Converter={StaticResource InverseNullToVis}}">
+                                        <TextBlock Text="&#xE8B7;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                                                   Foreground="{StaticResource SoftTextBrush}"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <Border CornerRadius="7" Background="#F1F5F9"
+                                            Visibility="{Binding ImageUrl, Converter={StaticResource NullToVis}}">
+                                        <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrl}}"
+                                               Stretch="UniformToFill" />
+                                    </Border>
+                                </Grid>
+                                <TextBlock Grid.Column="1" Text="{Binding Name}" FontWeight="SemiBold"
+                                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                <Border Grid.Column="2" Style="{StaticResource Badge}" Padding="7,1"
+                                        VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding ProductCount}" FontSize="10" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Column="2" Style="{StaticResource Card}" Padding="0">
+            <DockPanel>
+                <Border DockPanel.Dock="Top" Padding="16,13" BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="0,0,0,1">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Products" Style="{StaticResource SectionTitle}" />
+                                <TextBlock Text="Menu items, prices, tax and kitchen station"
+                                           Style="{StaticResource MutedText}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" Width="190"
+                                         Margin="0,0,8,0" ToolTip="Search products"
+                                         AutomationProperties.Name="Search products" />
+                                <Button Content="New product" Style="{StaticResource AccentButton}"
+                                        Command="{Binding NewProductCommand}" Margin="0,0,6,0" />
+                                <Button Content="Recipe" Style="{StaticResource SmallButton}"
+                                        Command="{Binding EditRecipeCommand}" Margin="0,0,6,0" />
+                                <Button Content="Import CSV" Style="{StaticResource SmallButton}"
+                                        Command="{Binding ImportCsvCommand}" Margin="0,0,6,0" />
+                                <Button Content="Export CSV" Style="{StaticResource SmallButton}"
+                                        Command="{Binding ExportCsvCommand}" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border DockPanel.Dock="Bottom" Padding="16,10" Background="#F8FAFC"
+                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0" CornerRadius="0,0,12,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding ErrorMessage}" Style="{StaticResource ErrorText}"
+                                   VerticalAlignment="Center"
+                                   Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}" />
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button Content="Edit selected" Style="{StaticResource SmallButton}"
+                                    Command="{Binding EditProductCommand}" Margin="0,0,6,0" />
+                            <Button Content="Delete selected" Style="{StaticResource DangerButton}"
+                                    Command="{Binding DeleteProductCommand}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <DataGrid ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}"
+                          BorderThickness="0">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="" Width="46">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid Width="30" Height="30">
+                                        <Border CornerRadius="6" Background="#F1F5F9"
+                                                Visibility="{Binding ImageUrl, Converter={StaticResource InverseNullToVis}}">
+                                            <TextBlock Text="&#xE8F1;" FontFamily="Segoe MDL2 Assets" FontSize="13"
+                                                       Foreground="{StaticResource SoftTextBrush}"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <Border CornerRadius="6" Background="#F1F5F9"
+                                                Visibility="{Binding ImageUrl, Converter={StaticResource NullToVis}}">
+                                            <Image Source="{Binding ImageUrl, Converter={StaticResource ImageUrl}}"
+                                                   Stretch="UniformToFill" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Product" Binding="{Binding Name}" Width="*" />
+                        <DataGridTextColumn Header="SKU" Binding="{Binding Sku}" Width="100" />
+                        <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="130" />
+                        <DataGridTextColumn Header="Price" Width="105"
+                                            Binding="{Binding Price, Converter={StaticResource Currency}}" />
+                        <DataGridTextColumn Header="Tax %" Binding="{Binding TaxRate, StringFormat={}{0:0.##}}" Width="65" />
+                        <DataGridTextColumn Header="Station" Width="85"
+                                            Binding="{Binding PreparationStation, Converter={StaticResource EnumDisplay}}" />
+                        <DataGridTemplateColumn Header="Available" Width="85">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource Badge}" Padding="7,1"
+                                            Background="{Binding IsAvailable, Converter={StaticResource StatusBackground}}">
+                                        <TextBlock Text="{Binding IsAvailable}" FontSize="10" FontWeight="SemiBold"
+                                                   Foreground="{Binding IsAvailable, Converter={StaticResource StatusBrush}}" />
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>

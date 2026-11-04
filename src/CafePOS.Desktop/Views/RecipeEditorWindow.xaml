@@ -1,0 +1,93 @@
+<Window x:Class="CafePOS.Desktop.Views.RecipeEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Recipe" Height="620" Width="680"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="White">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="{Binding Heading}" Style="{StaticResource PageTitle}" FontSize="21" />
+                <TextBlock Text="Ingredients consumed each time this item is sold." Style="{StaticResource MutedText}"
+                           Margin="0,3,0,0" />
+            </StackPanel>
+            <Button Grid.Column="1" Content="Add ingredient" Style="{StaticResource AccentButton}"
+                    Command="{Binding AddLineCommand}" VerticalAlignment="Center" />
+        </Grid>
+
+        <Border Grid.Row="1" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="14">
+                <StackPanel>
+                    <Grid Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="40" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="INGREDIENT" Style="{StaticResource Label}" />
+                        <TextBlock Grid.Column="1" Text="QUANTITY" Style="{StaticResource Label}" />
+                        <TextBlock Grid.Column="2" Text="UNIT" Style="{StaticResource Label}" />
+                        <TextBlock Grid.Column="3" Text="COST" Style="{StaticResource Label}" />
+                    </Grid>
+                    <ItemsControl ItemsSource="{Binding Lines}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="90" />
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="40" />
+                                    </Grid.ColumnDefinitions>
+                                    <ComboBox Grid.Column="0" ItemsSource="{Binding Ingredients}"
+                                              SelectedItem="{Binding SelectedIngredient}" DisplayMemberPath="Name"
+                                              Margin="0,0,8,0" />
+                                    <TextBox Grid.Column="1" Text="{Binding QuantityText, UpdateSourceTrigger=PropertyChanged}"
+                                             Margin="0,0,8,0" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Unit}" Style="{StaticResource MutedText}"
+                                               VerticalAlignment="Center" Margin="0,0,8,0" />
+                                    <TextBlock Grid.Column="3" Text="{Binding Cost, Converter={StaticResource Currency}}"
+                                               VerticalAlignment="Center" />
+                                    <Button Grid.Column="4" Content="&#xE711;" Style="{StaticResource IconButton}"
+                                            Foreground="{StaticResource DangerBrush}"
+                                            Command="{Binding DataContext.RemoveLineCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="No ingredients yet. Add a line to build the recipe."
+                               Style="{StaticResource MutedText}"
+                               Visibility="{Binding Lines.Count, Converter={StaticResource CountToVis}, ConverterParameter=invert}" />
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <StackPanel Grid.Row="2" Margin="0,14,0,0">
+            <TextBlock Text="{Binding ErrorMessage}" Style="{StaticResource ErrorText}" Margin="0,0,0,8"
+                       Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Cancel" Height="42" Click="OnCancel" IsCancel="True" />
+                <Button Grid.Column="2" Content="Save recipe" Style="{StaticResource AccentButton}"
+                        Height="42" Click="OnSave" IsDefault="True" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

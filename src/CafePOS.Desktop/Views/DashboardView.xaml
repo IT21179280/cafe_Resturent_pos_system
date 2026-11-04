@@ -1,0 +1,258 @@
+<UserControl x:Class="CafePOS.Desktop.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Foreground="{StaticResource TextBrush}" FontFamily="Segoe UI">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
+            <Border CornerRadius="18" Margin="0,0,0,16" Padding="22,18" ClipToBounds="True">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#0B1220" Offset="0" />
+                        <GradientStop Color="#0F3D3A" Offset="0.62" />
+                        <GradientStop Color="#0F766E" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <Ellipse Width="240" Height="240" Fill="#5EEAD4" Opacity="0.12"
+                             HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-130,-70,0"
+                             IsHitTestVisible="False" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Width="45" Height="45" VerticalAlignment="Center"
+                                  AutomationProperties.Name="Dashboard logo">
+                                <Border CornerRadius="12" Background="#14B8A6"
+                                        Visibility="{Binding Branding.LogoUrl, Converter={StaticResource InverseNullToVis}}">
+                                    <TextBlock Text="&#xE7BF;" FontFamily="Segoe MDL2 Assets" FontSize="21"
+                                               Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <Border CornerRadius="12" Background="White"
+                                        Visibility="{Binding Branding.LogoUrl, Converter={StaticResource NullToVis}}">
+                                    <Image Source="{Binding Branding.LogoUrl, Converter={StaticResource ImageUrl}}"
+                                           Stretch="Uniform" Margin="5" />
+                                </Border>
+                            </Grid>
+                            <StackPanel Margin="13,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Branding.SystemName}" FontSize="21" FontWeight="Bold"
+                                           Foreground="White" />
+                                <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                                    <TextBlock Text="{Binding Greeting}" FontSize="12" FontWeight="SemiBold"
+                                               Foreground="#CCFBF1" />
+                                    <TextBlock Text="  ·  " FontSize="12" Foreground="#5EEAD4" />
+                                    <TextBlock Text="{Binding TodayLabel}" FontSize="11" Foreground="#A7C4C0" />
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="Refresh dashboard" Background="White" BorderBrush="White"
+                                Foreground="{StaticResource AccentDarkBrush}" Style="{StaticResource BaseButton}"
+                                Command="{Binding RefreshCommand}" VerticalAlignment="Center" />
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Background="#FEF2F2" BorderBrush="#FECACA" Margin="0,0,0,14"
+                    Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}">
+                <TextBlock Text="{Binding ErrorMessage}" Style="{StaticResource ErrorText}" />
+            </Border>
+
+            <UniformGrid Rows="1" Columns="5" Margin="-6,0,-6,14">
+                <Border Style="{StaticResource StatCard}" Margin="6">
+                    <StackPanel>
+                        <Grid>
+                            <Border Width="32" Height="32" CornerRadius="9" Background="#E6FFFA" HorizontalAlignment="Left">
+                                <TextBlock Text="&#xE8C7;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                           Foreground="{StaticResource AccentBrush}" HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="TODAY'S SALES" Style="{StaticResource MetricLabel}" Margin="40,0,0,0"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                        <TextBlock Text="{Binding Dashboard.TodaySales, Converter={StaticResource Currency}}"
+                                   Style="{StaticResource MetricValue}" Margin="0,10,0,0" />
+                        <TextBlock Text="Completed orders" Style="{StaticResource MutedText}" Margin="0,3,0,0" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource StatCard}" Margin="6">
+                    <StackPanel>
+                        <Grid>
+                            <Border Width="32" Height="32" CornerRadius="9" Background="#EFF6FF" HorizontalAlignment="Left">
+                                <TextBlock Text="&#xE9D2;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                           Foreground="#2563EB" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="ORDERS TODAY" Style="{StaticResource MetricLabel}" Margin="40,0,0,0"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                        <TextBlock Text="{Binding Dashboard.TodayOrders}" Style="{StaticResource MetricValue}" Margin="0,10,0,0" />
+                        <TextBlock Text="All order types" Style="{StaticResource MutedText}" Margin="0,3,0,0" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource StatCard}" Margin="6">
+                    <StackPanel>
+                        <Grid>
+                            <Border Width="32" Height="32" CornerRadius="9" Background="#F5F3FF" HorizontalAlignment="Left">
+                                <TextBlock Text="&#xE8EF;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                           Foreground="#7C3AED" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="AVERAGE ORDER" Style="{StaticResource MetricLabel}" Margin="40,0,0,0"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                        <TextBlock Text="{Binding Dashboard.AverageOrderValue, Converter={StaticResource Currency}}"
+                                   Style="{StaticResource MetricValue}" Margin="0,10,0,0" />
+                        <TextBlock Text="Per completed bill" Style="{StaticResource MutedText}" Margin="0,3,0,0" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource StatCard}" Margin="6">
+                    <StackPanel>
+                        <Grid>
+                            <Border Width="32" Height="32" CornerRadius="9" Background="#FFF7ED" HorizontalAlignment="Left">
+                                <TextBlock Text="&#xE80F;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                           Foreground="#EA580C" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="OPEN TABLES" Style="{StaticResource MetricLabel}" Margin="40,0,0,0"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                        <TextBlock Text="{Binding Dashboard.OpenTables}" Style="{StaticResource MetricValue}" Margin="0,10,0,0" />
+                        <TextBlock Text="Currently occupied" Style="{StaticResource MutedText}" Margin="0,3,0,0" />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource StatCard}" Margin="6">
+                    <StackPanel>
+                        <Grid>
+                            <Border Width="32" Height="32" CornerRadius="9" Background="#FEF2F2" HorizontalAlignment="Left">
+                                <TextBlock Text="&#xE7C3;" FontFamily="Segoe MDL2 Assets" FontSize="15"
+                                           Foreground="#DC2626" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="KITCHEN QUEUE" Style="{StaticResource MetricLabel}" Margin="40,0,0,0"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                        <TextBlock Text="{Binding Dashboard.PendingKitchenOrders}" Style="{StaticResource MetricValue}" Margin="0,10,0,0" />
+                        <TextBlock Text="Pending tickets" Style="{StaticResource MutedText}" Margin="0,3,0,0" />
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <Grid Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.15*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource Card}">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="Sales by hour" Style="{StaticResource SectionTitle}" />
+                        <TextBlock DockPanel.Dock="Top" Text="Completed sales today · local time"
+                                   Style="{StaticResource MutedText}" Margin="0,2,0,12" />
+                        <ScrollViewer MaxHeight="270" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding Dashboard.HourlySales}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,7">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="54" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="88" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Hour, StringFormat={}{0:00}:00}" Style="{StaticResource MutedText}" />
+                                            <ProgressBar Grid.Column="1" Height="9" Maximum="{Binding DataContext.MaxHourlySales, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                         Value="{Binding Sales}" Foreground="{StaticResource AccentBrush}"
+                                                         Background="#E2E8F0" BorderThickness="0" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="2" Text="{Binding Sales, Converter={StaticResource Currency}}"
+                                                       FontSize="11" HorizontalAlignment="Right" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </DockPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource Card}">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="Top products today" Style="{StaticResource SectionTitle}" />
+                        <TextBlock DockPanel.Dock="Top" Text="Ranked by revenue" Style="{StaticResource MutedText}" Margin="0,2,0,12" />
+                        <DataGrid ItemsSource="{Binding Dashboard.TopProducts}" BorderThickness="0" RowHeight="34"
+                                  ColumnHeaderHeight="32" Background="Transparent">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Product" Binding="{Binding Name}" Width="*" />
+                                <DataGridTextColumn Header="Qty" Binding="{Binding Quantity, StringFormat={}{0:0.##}}" Width="56" />
+                                <DataGridTextColumn Header="Revenue"
+                                                    Binding="{Binding Revenue, Converter={StaticResource Currency}}" Width="120" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </Border>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource Card}">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="Recent orders" Style="{StaticResource SectionTitle}" />
+                        <TextBlock DockPanel.Dock="Top" Text="Latest activity across all channels"
+                                   Style="{StaticResource MutedText}" Margin="0,2,0,12" />
+                        <DataGrid ItemsSource="{Binding Dashboard.RecentOrders}" BorderThickness="0" MaxHeight="260">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Order" Binding="{Binding OrderNumber}" Width="140" />
+                                <DataGridTextColumn Header="Type" Binding="{Binding Type, Converter={StaticResource EnumDisplay}}" Width="90" />
+                                <DataGridTextColumn Header="Table" Binding="{Binding TableNumber}" Width="60" />
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status, Converter={StaticResource EnumDisplay}}" Width="100" />
+                                <DataGridTextColumn Header="Items" Binding="{Binding ItemCount}" Width="55" />
+                                <DataGridTextColumn Header="Total"
+                                                    Binding="{Binding Total, Converter={StaticResource Currency}}" Width="120" />
+                                <DataGridTextColumn Header="Time"
+                                                    Binding="{Binding PlacedAt, Converter={StaticResource DateTime}}" Width="140" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource Card}">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="Low stock alerts" Style="{StaticResource SectionTitle}" />
+                        <TextBlock DockPanel.Dock="Top" Text="Reorder before the next service"
+                                   Style="{StaticResource MutedText}" Margin="0,2,0,12" />
+                        <ScrollViewer MaxHeight="260" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding Dashboard.LowStockItems}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1"
+                                                Padding="0,8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                                    <TextBlock Text="{Binding CurrentStock, StringFormat=On hand: {0:0.###}}"
+                                                               Style="{StaticResource MutedText}" />
+                                                </StackPanel>
+                                                <Border Grid.Column="1" Style="{StaticResource Badge}" Background="#FEF2F2"
+                                                        VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding LowStockThreshold, StringFormat=Min {0:0.###}}"
+                                                               Foreground="{StaticResource DangerBrush}" FontSize="11"
+                                                               FontWeight="SemiBold" />
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                        <TextBlock Text="All stock levels are healthy." Style="{StaticResource MutedText}"
+                                   Visibility="{Binding Dashboard.LowStockItems.Count, Converter={StaticResource CountToVis}, ConverterParameter=invert}" />
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
